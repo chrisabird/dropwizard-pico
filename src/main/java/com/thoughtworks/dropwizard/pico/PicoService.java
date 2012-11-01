@@ -1,7 +1,6 @@
 package com.thoughtworks.dropwizard.pico;
 
 import com.sun.jersey.spi.container.servlet.ServletContainer;
-import com.yammer.dropwizard.bundles.AssetsBundle;
 import com.yammer.dropwizard.config.Environment;
 import com.yammer.dropwizard.jersey.DropwizardResourceConfig;
 import org.picocontainer.DefaultPicoContainer;
@@ -19,7 +18,6 @@ public abstract class PicoService<T extends com.yammer.dropwizard.config.Configu
     public PicoService(String name, PicoConfiguration picoConfiguration) {
         super(name);
         populateContainers(picoConfiguration);
-        addBundle(new AssetsBundle());
     }
 
     private void populateContainers(PicoConfiguration picoConfiguration) {
