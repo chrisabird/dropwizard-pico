@@ -21,7 +21,6 @@ public class PicoBundle implements ConfiguredBundle<Configuration> {
         this.picoConfiguration = picoConfiguration;
     }
 
-    @Override
     public void run(Configuration configuration, Environment environment) throws Exception {
         Set<Class<?>>  resources = new HashSet<Class<?>>();
         picoConfiguration.registerResources(resources);
@@ -33,8 +32,8 @@ public class PicoBundle implements ConfiguredBundle<Configuration> {
         MutablePicoContainer resourceScope = new DefaultPicoContainer(applicationScope);
         picoConfiguration.registerResourceScope(resourceScope);
 
-
         for(Class<?> c : resources){
+            resourceScope.addComponent(c);
             environment.addResource(c);
         }
 
@@ -43,7 +42,6 @@ public class PicoBundle implements ConfiguredBundle<Configuration> {
         environment.setJerseyServletContainer(new ServletContainer(jerseyResourceConfig));
     }
 
-    @Override
     public void initialize(Bootstrap<?> bootstrap) {
     }
 }
