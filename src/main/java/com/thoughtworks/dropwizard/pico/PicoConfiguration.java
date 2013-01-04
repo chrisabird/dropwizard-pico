@@ -27,12 +27,13 @@
  */
 package com.thoughtworks.dropwizard.pico;
 
+import com.yammer.dropwizard.config.Configuration;
 import org.picocontainer.MutablePicoContainer;
 
 import java.util.Set;
 
-public interface PicoConfiguration {
-    void registerApplicationScope(MutablePicoContainer scope);
-    void registerResourceScope(MutablePicoContainer scope);
-    void registerResources(Set<Class<?>> resources);
+public interface PicoConfiguration<T extends Configuration> {
+    void registerApplicationScope(MutablePicoContainer scope, T configuration);
+    void registerResourceScope(MutablePicoContainer scope, T configuration);
+    void registerResources(Set<Class<?>> resources, T configuration);
 }
