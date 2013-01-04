@@ -13,7 +13,7 @@ import org.picocontainer.behaviors.Caching;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PicoBundle implements ConfiguredBundle<Configuration> {
+public class PicoBundle<T extends Configuration> implements ConfiguredBundle<T> {
     private PicoConfiguration picoConfiguration;
 
     public PicoBundle(PicoConfiguration picoConfiguration) {
@@ -21,16 +21,16 @@ public class PicoBundle implements ConfiguredBundle<Configuration> {
         this.picoConfiguration = picoConfiguration;
     }
 
-    public void run(Configuration configuration, Environment environment) throws Exception {
+    public void run(T configuration, Environment environment) throws Exception {
         Set<Class<?>>  resources = new HashSet<Class<?>>();
-        picoConfiguration.registerResources(resources);
+        picoConfiguration.registerResources(resources, configuration);
 
         MutablePicoContainer applicationScope = new DefaultPicoContainer(new Caching());
         applicationScope.addComponent(configuration);
-        picoConfiguration.registerApplicationScope(applicationScope);
+        picoConfiguration.registerApplicationScope(applicationScope, configuration);
 
         MutablePicoContainer resourceScope = new DefaultPicoContainer(applicationScope);
-        picoConfiguration.registerResourceScope(resourceScope);
+        picoConfiguration.registerResourceScope(resourceScope, configuration);
 
         for(Class<?> c : resources){
             resourceScope.addComponent(c);
@@ -41,6 +41,7 @@ public class PicoBundle implements ConfiguredBundle<Configuration> {
         jerseyResourceConfig.getSingletons().add(new PicoComponentProviderFactory(resourceScope, resources));
         environment.setJerseyServletContainer(new ServletContainer(jerseyResourceConfig));
     }
+
 
     public void initialize(Bootstrap<?> bootstrap) {
     }
